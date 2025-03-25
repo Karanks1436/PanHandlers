@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Controller</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <script>
+        let module = angular.module("myModule", []);
+        let controller = module.controller("myController", function ($scope, $http) {
+
+            $scope.JsonAry = [];
+            $scope.Fetchall = function () {
+                let url = "/all-records";
+                $http.get(url).then(FxSuccess, FxFail);
+
+                function FxSuccess(response) {
+                    $scope.JsonAry = response.data;
+                }
+
+                function FxFail(err) {
+                    alert(err.data);
+                }
+            }
+
+            $scope.block = function (email) {
+                let url = "/block-record-one?email=" + email;
+                $http.get(url).then(fxSuccess, fxFail);
+
+                function fxSuccess(response) {
+                    alert(email + "  " + "Blocked");
+                    $scope.Fetchall();
+                }
+
+                function fxFail(err) {
+                    alert(err.data);
+                }
+            }
+
+            $scope.resume = function (email) {
+                let url = "/resume-record-one?email=" + email;
+                $http.get(url).then(fxSuccess, fxFail);
+
+                function fxSuccess(response) {
+                    alert(email + "  " + "Resumed");
+                    $scope.Fetchall();
+                }
+
+                function fxFail(err) {
+                    alert(err.data);
+                }
+            }
+
+        })
+    </script>
+</head>
+
+<body ng-app="myModule" ng-controller="myController" ng-init="Fetchall()">
+    <div class="p-2 bg-dark text-white">
+        <h5>www.panhadlers.com</h5>
+    </div>
+
+    <div class="text-center mt-5">
+        <h1>User Control</h1>
+    </div>
+
+    <div class="container mt-4">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Sr.No.</th>
+                    <th>Email ID</th>
+                    <th>User Type</th>
+                    <th>Status</th>
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="obj in JsonAry">
+                    <td>{{$index + 1}}</td>
+                    <td>{{obj.email}}</td>
+                    <td>{{obj.usertype}}</td>
+                    <td>{{obj.status}}</td>
+                    <td>
+                        <button class="btn btn-dark" ng-click="block(obj.email)">Block</button>
+                        <button class="btn btn-secondary" ng-click="resume(obj.email)">Resume</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

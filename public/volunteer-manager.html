@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <script>
+        let module = angular.module("myModule", []);
+        let controller = module.controller("myController", function ($scope, $http) {
+            $scope.JsonAry = [];
+            $scope.Fetchall = function () {
+                let url = "/vol-manager";
+                $http.get(url).then(FxSuccess, FxFail);
+
+                function FxSuccess(response) {
+                    $scope.JsonAry = response.data;
+                }
+
+                function FxFail(err) {
+                    alert("Error: " + err.data);
+                }
+            }
+        })
+    </script>
+</head>
+
+<body ng-app="myModule" ng-controller="myController" ng-init="Fetchall()">
+    <div class="p-3 mb-4 bg-dark">
+        <h5 class="text-center text-white">www.panhadlers.com</h5>
+    </div>
+
+    <div class="container">
+        <div class="text-center mb-4">
+            <h1>Volunteers Record</h1>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Sr.No.</th>
+                    <th>Email ID</th>
+                    <th>User Type</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="obj in JsonAry">
+                    <td>{{$index + 1}}</td>
+                    <td>{{obj.email}}</td>
+                    <td>{{obj.usertype}}</td>
+                    <td>{{obj.status}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

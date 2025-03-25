@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="icon" type="image/x-icon" href="https://media.istockphoto.com/id/1399229336/vector/homeless-man-on-street-businessmen.jpg?s=612x612&w=0&k=20&c=uL7nSHRWT-K160Nfh8WgRGjAIbiUwPlGCzec0zVYHPw=">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+      body {
+        overflow-x: hidden;
+      }
+
+      @media (max-width: 576px) {
+        
+    .fs-4 {
+      font-size: 0.75rem !important; 
+    }
+    .fs-6 {
+      font-size: 0.60rem !important; 
+    }
+    .text-white {
+      font-size: 0.86rem !important; 
+    }
+   
+  }
+
+  
+  @media (min-width: 576px) and (max-width: 767px) {
+    .fs-4 {
+      font-size: 1.2rem !important;
+    }
+    .fs-6 {
+      font-size: 1rem !important; 
+    }
+  }
+    </style>
+    <script>
+      $(document).ready(function(){
+        $("#btnsignup").click(function(){
+          let obj={ 
+            type:"get",
+            url:"/url-signup-process",
+            data:{
+              email:$("#txtEmail").val(),
+              password:$("#txtPwd").val(),
+              usertype:$("#usertype").val(),
+            }
+          }
+
+          $.ajax(obj).then(function(responseInJsonAry){
+            alert(JSON.stringify(responseInJsonAry));
+            
+          }).fail(function(err){
+            alert(err.message);
+          })
+        })
+
+        $("#btnlogin").click(function(){
+          let obj={ 
+            type:"get",
+            url:"/url-login-process",
+            data:{
+              email:$("#txtEmail1").val(),
+              password:$("#txtPwd1").val(),
+            }
+          }
+
+          $.ajax(obj).then(function(responseInJsonAry){
+            alert(JSON.stringify(responseInJsonAry) + "Logged In");
+            $("#resultinglogin").html(+responseInJsonAry)
+        if (responseInJsonAry == "Volunteer") {
+          localStorage.setItem("activeUser",$("#txtEmail1").val());
+
+          window.location.href = "/vol-dashboard.html"; 
+        } else if (responseInJsonAry == "Client") {
+          window.location.href = "/client-dashboard.html";
+          localStorage.setItem("activeUser",$("#txtEmail1").val());
+        }else if (responseInJsonAry == "Admin") {
+          window.location.href = "/admin-dash.html";
+          localStorage.setItem("activeUser",$("#txtEmail1").val());
+        }
+          }).fail(function(err){
+            alert(err.message);
+          })
+        })
+      })
+    </script>
+</head>
+<body class="bg-light">
+  <div class="col-12 d-flex justify-content-between align-items-center pt-3 pb-3 bg-dark shadow-lg">
+    <div class="d-flex align-items-center">
+      <img src="https://media.istockphoto.com/id/1399229336/vector/homeless-man-on-street-businessmen.jpg?s=612x612&w=0&k=20&c=uL7nSHRWT-K160Nfh8WgRGjAIbiUwPlGCzec0zVYHPw=" 
+           alt="Logo" class="rounded-circle mx-3" height="50px" width="50px">
+      <h4 class="text-white m-0 fs-4 fs-sm-3 fs-md-2">www.Panhandlers.com</h4>
+    </div>
+    
+    <div class="d-flex gap-2">
+      <button type="button" class="btn btn-light px-4 py-2 rounded-3 fs-6" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Sign Up
+      </button>
+      <button type="button" class="btn btn-outline-light px-4 py-2 rounded-3 fs-6" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+        Login
+      </button>
+    </div>
+  
+  </div>
+  
+<!-- Curousal -->
+  <div class="col-md-12">
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner" >
+        <div class="carousel-item active" >
+          <img src="https://www.shutterstock.com/image-photo/make-me-biblical-image-beggar-600nw-2530960183.jpg" class="d-block w-100" height="400px" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="https://media.istockphoto.com/id/1366606599/photo/close-up-of-the-poor-or-homeless-homeless-people-ask-for-money-in-public-the-poor-beggar-in.jpg?s=612x612&w=0&k=20&c=wNZvJcveMcF2VBcMuisY5kgVA-iMar6rtTnpIDQWXzc=" class="d-block w-100"  height="400px" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="https://static.vecteezy.com/system/resources/thumbnails/004/828/242/small/a-homeless-man-begging-for-help-ask-for-a-coin-of-human-mercy-on-a-wooden-floor-in-a-public-walkway-poor-homeless-people-in-the-city-social-problems-finance-and-housing-photo.jpg" class="d-block w-100"  height="400px" alt="...">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="get" action="/url-signup-process" class="p-4 border rounded-3 shadow-sm">
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label text-dark">Email address</label>
+              <input type="email" class="form-control" name="txtEmail" id="txtEmail" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label text-dark">Password</label>
+              <input type="password" class="form-control" name="txtPwd" id="txtPwd" required>
+            </div>
+            <div class="mb-3">
+              <label for="userType" class="form-label text-dark">User Type</label>
+              <select name="usertype" id="usertype" class="form-select">
+                <option value="none">Select</option>
+                <option value="Volunteer">Volunteer</option>
+                <option value="Client">Client</option>
+              </select>
+            </div>
+            <button type="button" id="btnsignup" class="btn btn-warning w-100">Sign Up</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="get" action="/url-login-process" class="p-4 border rounded-3 shadow-sm">
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label text-dark">Email address</label>
+              <input type="email" class="form-control" name="txtEmail1" id="txtEmail1" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label text-dark">Password</label>
+              <input type="password" class="form-control" name="txtPwd1" id="txtPwd1" required>
+            </div>
+            <button type="button" id="btnlogin" class="btn btn-warning w-100">Login</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <div id="resultinglogin"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-dark text-white p-2 mt-2 mb-2 text-center">
+    <h2>Our Services</h2>
+  </div>
+
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <!-- No Beggars Card -->
+      <div class="col-md-3 mb-4">
+        <div class="card shadow-sm d-flex flex-column" style="height: 450px;">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            <img src="https://png.pngtree.com/png-clipart/20230330/original/pngtree-no-begging-sign-png-image_9009529.png" alt="No Beggars" class="img-fluid rounded-circle mb-3" style="height: 100px; width: 100px;">
+            <h5 class="card-title text-center">No Beggars</h5>
+            <p class="card-text text-center">A beggar-free society is a vision for a community where every individual has access to the necessary resources and opportunities to live with dignity, free from the need to rely on begging.</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Job Opportunities Card -->
+      <div class="col-md-3 mb-4">
+        <div class="card shadow-sm d-flex flex-column" style="height: 450px;">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            <img src="https://img.freepik.com/free-photo/employment-opportunity-hiring-jobs-icon_53876-121249.jpg" alt="Job Opportunities" class="img-fluid rounded-circle mb-3" style="height: 100px; width: 100px;">
+            <h5 class="card-title text-center">Job Opportunities</h5>
+            <p class="card-text text-center">A beggar-free society includes not just the elimination of begging but ensuring that all people, including those who are homeless or in poverty, have the tools, resources, and opportunities to reintegrate into the workforce with dignity.</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Volunteer Card -->
+      <div class="col-md-3 mb-4">
+        <div class="card shadow-sm d-flex flex-column" style="height: 450px;">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            <img src="https://www.alrpost259.org/images/easyblog_articles/24/81650270_volunteer.jpg" alt="Volunteer" class="img-fluid rounded-circle mb-3" style="height: 100px; width: 100px;">
+            <h5 class="card-title text-center">Volunteer</h5>
+            <p class="card-text text-center">Anyone can join and volunteer to help make a difference in creating a beggar-free society and supporting those who are homeless or in poverty. Volunteering is a powerful way to contribute to the cause, provide assistance, and spread awareness.</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Help Card -->
+      <div class="col-md-3 mb-4">
+        <div class="card shadow-sm d-flex flex-column" style="height: 450px;">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            <img src="https://static.vecteezy.com/system/resources/previews/008/342/746/non_2x/24-7-support-sign-label-template-free-vector.jpg" alt="Help" class="img-fluid rounded-circle mb-3" style="height: 100px; width: 100px;">
+            <h5 class="card-title text-center">Help</h5>
+            <p class="card-text text-center text-wrap fs-6 fs-md-5">
+              A 24/7 help system for individuals experiencing homelessness or those who are in need of immediate assistance is essential to ensure that no one is left without support, regardless of the time of day or night. Having round-the-clock services can address emergency needs, provide constant care, and ensure that individuals have the help they need in crisis situations.
+          </p>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="bg-dark text-white p-2 mt-2 mb-2 text-center">
+    <h2>How It Works</h2>
+  </div>
+  <div class="row">    
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm text-center p-4">
+            <div class="card-body">
+                <img src="https://img.icons8.com/ios/452/online-support.png" alt="Step 1" class="mb-3" style="width: 80px; height: 80px;">
+                <h5 class="card-title">Step 1: Sign Up</h5>
+                <p class="card-text">Register on our platform as a volunteer, client, or admin to get started. Signing up gives you access to a wide range of opportunities to help those in need.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm text-center p-4">
+            <div class="card-body">
+                <img src="https://img.icons8.com/ios/452/search.png" alt="Step 2" class="mb-3" style="width: 80px; height: 80px;">
+                <h5 class="card-title">Step 2: Choose Your Role</h5>
+                <p class="card-text">Select your role: volunteer, client, or admin. Volunteers help those in need, clients receive support, and admins oversee the entire operation.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm text-center p-4">
+            <div class="card-body">
+                <img src="https://img.icons8.com/ios/452/handshake.png" alt="Step 3" class="mb-3" style="width: 80px; height: 80px;">
+                <h5 class="card-title">Step 3: Connect and Contribute</h5>
+                <p class="card-text">Start connecting with people in need or offer your services as a volunteer. Contribute your time, effort, and skills to make a real difference in someone's life.</p>
+            </div>
+        </div>
+    </div>
+</div>
+  <div>
+
+  </div>
+
+  
+  <div class="bg-dark text-white p-2 mt-2 mb-2 text-center">
+    <h2>Meet the Developers/Team</h2>
+  </div>
+  <div>
+    <d<div class="container py-5">
+      <div class="row d-flex justify-content-center">
+        
+        <!-- First Card: Developed By -->
+        <div class="col-sm-4 mb-3 mb-sm-0">
+          <div class="card py-3">
+            <div class="card-body">
+              <h6 class="card-title text-center">Developed By:</h6>
+              <div class="card-body d-flex align-items-center">
+              <div>
+                <img src="https://karankks-1436.web.app/KKS.jpeg" alt="Karan Kumar" class="img-fluid rounded-circle" height="100px" width="100px">
+              </div>
+              <div>
+                <h5 class="card-text mx-5">~Karan Kumar</h5>      
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Second Card: Under the Guidance of -->
+        <div class="col-sm-4 mb-3 mb-sm-0">
+          <div class="card py-3">
+            <div class="card-body">
+              <h6 class="card-title text-center">Under the Guidance of:</h6>
+              <div class="card-body d-flex align-items-center   ">
+              <div>
+                <img src="https://www.banglorecomputereducation.com/pics/sir.jpg" alt="Rajesh Bansal" class="img-fluid rounded-circle" height="100px" width="100px">
+                
+              </div>
+              <div>
+                <h5 class="card-text mx-5">~Rajesh Bansal</h5>      
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+    
+      </div>
+    </div> 
+  </div>
+
+  <div class="bg-dark text-white p-2 mt-2 mb-2 text-center">
+    <h2>Reach Us:</h2>
+  </div>
+  <div class="container-fluid p-0">
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1610.363698827448!2d74.94078553557938!3d30.2206472978768!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39173297173abbcd%3A0xa00033c0a58a5ac8!2sBathinda%2C%20Punjab!5e0!3m2!1sen!2sin!4v1742724825661!5m2!1sen!2sin" style="border:0; width: 100%; height: 350px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+
+  <!-- Footer -->
+<footer class="bg-dark text-white text-center py-4">
+  <div>
+    <p>&copy; 2025 Panhandlers.com. All Rights Reserved.</p>
+    <p>Follow us on <a href="#" class="text-white"><img src="https://img.freepik.com/premium-photo/bold-white-text-deep-black-background-creating-striking-highcontrast-facebook-quote-image-aspect-ratio-32-v-61-job-id-d2e30262cd5749e6b724a42b2b3489f6_1214173-53241.jpg?semt=ais_hybrid" alt="" height="30px" width="30px" class="rounded-circle"></a>
+       <a href="#" class="text-white"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24805890/STK160_X_Twitter_008.jpg?quality=90&strip=all&crop=0%2C0.0083291687489577%2C100%2C99.983341662502&w=2400" alt="" height="30px" width="30px" class="rounded-circle"></a> 
+       <a href="#" class="text-white"><img src="https://wallpapers.com/images/hd/instagram-black-background-nqta6l3vrpci1oft.jpg" alt="" height="30px" width="30px" class="rounded-circle"></a></p>
+  </div>
+</footer>
+
+  
+</body>
+</html>
