@@ -12,13 +12,14 @@ app.use(express.static("public"));
 app.use(express.urlencoded(true)); 
 app.use(fileUploader());
 
-let dbconfig= "mysql://avnadmin:AVNS__SxktxwBy87P99ml2Hu@mysql-bce-karanksxxx-a6bb.i.aivencloud.com:10904/defaultdb";
+
+let dbconfig= process.env.dbconfig;
 let mysqlserver= mysql2.createConnection(dbconfig);
 
 cloudinary.config({ 
-    cloud_name: 'dbvdxepqe',  
-    api_key: '116987294548589',  
-    api_secret: 'SQ3xj_ETHnyn8n8A6x2aOWW3CeE' // Click 'View API Keys' above to copy your API secret
+    cloud_name: process.env.cloud_name,  
+    api_key:process.env.api_key,  
+    api_secret: process.env.api_secret // Click 'View API Keys' above to copy your API secret
 });
 
 
