@@ -10,6 +10,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+         function doLogout(){
+            localStorage.removeItem("activeUser");
+            alert("logged Out");
+            window.location.href="/";
+        }
+    </script>
 </head>
 
 <body>
@@ -42,6 +49,18 @@
                     <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg" class="card-img-top" alt="Client Manager" style="height: 320px; object-fit: cover;">
                     <div class="card-body d-flex justify-content-center">
                         <a href="client-manager.html" class="btn btn-dark px-5">Client Manager</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="card shadow">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3240/3240728.png" class="card-img-top" alt="Logout">
+                    <div class="card-body d-flex justify-content-center">
+                        <!-- <button type="button" formaction="/logout" class="btn btn-dark px-5">Logout</button> -->
+                        
+                            <a href="#" onclick="doLogout();" class="btn btn-dark px-5">Logout</a>
+                        
                     </div>
                 </div>
             </div>

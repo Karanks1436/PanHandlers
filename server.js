@@ -149,8 +149,8 @@ app.get("/fetchone",function(req,resp){
     })
 }) 
 
-app.post("/do-delete", function(req,resp){
-    mysqlserver.query("delete from volkyc where emailid=?",[req.body.txtEmail], function(err,result){
+app.get("/do-delete", function(req,resp){
+    mysqlserver.query("delete from jobs where jobid=?",[req.query.jobid], function(err,result){
         if(err==null)
         {
             if(result.affectedRows==1)
@@ -385,3 +385,27 @@ app.get("/job-search", function(req, resp) {
         }
     });
 });
+
+
+app.get("/job-search-email", function(req, resp) {
+    mysqlserver.query("select * from jobs where cid=?", [req.query.cid],
+        
+         function(err, result) {
+        if (err) {
+            resp.status(500).send(err.message);
+        } else {
+            resp.send(result);
+        }
+    });
+});
+
+
+
+app.get("/email-records",function(req,resp)
+{
+    mysqlserver.query("select * from jobs where cid=?",[req.query.cid],function(err,result)
+    {
+        console.log(result);
+        resp.send(result);
+    })
+})
