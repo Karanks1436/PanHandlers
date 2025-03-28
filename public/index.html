@@ -38,57 +38,97 @@
     }
   }
     </style>
-    <script>
-      $(document).ready(function(){
-        $("#btnsignup").click(function(){
-          let obj={ 
-            type:"get",
-            url:"/url-signup-process",
-            data:{
-              email:$("#txtEmail").val(),
-              password:$("#txtPwd").val(),
-              usertype:$("#usertype").val(),
-            }
-          }
+  <script>
+  $(document).ready(function(){
+    // Signup form validation
+    $("#btnsignup").click(function(){
+      let email = $("#txtEmail").val();
+      let password = $("#txtPwd").val();
+      let userType = $("#usertype").val();
+      let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-          $.ajax(obj).then(function(responseInJsonAry){
-            alert(JSON.stringify(responseInJsonAry));
-            
-          }).fail(function(err){
-            alert(err.message);
-          })
-        })
+      // Validate email format
+      if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
 
-        $("#btnlogin").click(function(){
-          let obj={ 
-            type:"get",
-            url:"/url-login-process",
-            data:{
-              email:$("#txtEmail1").val(),
-              password:$("#txtPwd1").val(),
-            }
-          }
+      // Validate password length
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters long.");
+        return;
+      }
 
-          $.ajax(obj).then(function(responseInJsonAry){
-            alert(JSON.stringify(responseInJsonAry) + "Logged In");
-            $("#resultinglogin").html(+responseInJsonAry)
+      // Validate user type selection
+      if (userType === "none") {
+        alert("Please select a user type.");
+        return;
+      }
+
+      let obj = { 
+        type: "get",
+        url: "/url-signup-process",
+        data: {
+          email: email,
+          password: password,
+          usertype: userType,
+        }
+      }
+
+      $.ajax(obj).then(function(responseInJsonAry){
+        alert(JSON.stringify(responseInJsonAry));
+      }).fail(function(err){
+        alert(err.message);
+      });
+    });
+
+    // Login form validation
+    $("#btnlogin").click(function(){
+      let email = $("#txtEmail1").val();
+      let password = $("#txtPwd1").val();
+      let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+      // Validate email format
+      if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      // Validate password
+      if (password.trim() === "") {
+        alert("Password cannot be empty.");
+        return;
+      }
+
+      let obj = { 
+        type: "get",
+        url: "/url-login-process",
+        data: {
+          email: email,
+          password: password,
+        }
+      }
+
+      $.ajax(obj).then(function(responseInJsonAry){
+        alert(JSON.stringify(responseInJsonAry) + "Logged In");
+        $("#resultinglogin").html(responseInJsonAry);
         if (responseInJsonAry == "Volunteer") {
-          localStorage.setItem("activeUser",$("#txtEmail1").val());
-
+          localStorage.setItem("activeUser", email);
           window.location.href = "/vol-dashboard.html"; 
         } else if (responseInJsonAry == "Client") {
           window.location.href = "/client-dashboard.html";
-          localStorage.setItem("activeUser",$("#txtEmail1").val());
-        }else if (responseInJsonAry == "Admin") {
+          localStorage.setItem("activeUser", email);
+        } else if (responseInJsonAry == "Admin") {
           window.location.href = "/admin-dash.html";
-          localStorage.setItem("activeUser",$("#txtEmail1").val());
+          localStorage.setItem("activeUser", email);
         }
-          }).fail(function(err){
-            alert(err.message);
-          })
-        })
-      })
-    </script>
+      }).fail(function(err){
+        alert(err.message);
+      });
+    });
+  });
+</script>
+
 </head>
 <body class="bg-light">
   <div class="col-12 d-flex justify-content-between align-items-center pt-3 pb-3 bg-dark shadow-lg">
