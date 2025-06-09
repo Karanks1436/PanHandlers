@@ -1,180 +1,346 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myModule">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Work</title>
-    <meta name="google-adsense-account" content="ca-pub-7210368865406744">
-    <link rel="icon" type="image/x-icon" href="https://media.istockphoto.com/id/1399229336/vector/homeless-man-on-street-businessmen.jpg?s=612x612&w=0&k=20&c=uL7nSHRWT-K160Nfh8WgRGjAIbiUwPlGCzec0zVYHPw=">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Find Work - Professional Job Search</title>
+  <link rel="icon" href="https://media.istockphoto.com/id/1399229336/vector/homeless-man-on-street-businessmen.jpg?s=612x612&w=0&k=20&c=uL7nSHRWT-K160Nfh8WgRGjAIbiUwPlGCzec0zVYHPw=" type="image/x-icon" />
 
-    <script>
-        let module = angular.module("myModule", []);
-        module.controller("myController", function($scope, $http) {
-            $scope.JsonAry = []; 
-            $scope.JsonAryTitle = [];
-            $scope.selCity = "none";
-            $scope.seljobTitle = "none"; 
-            $scope.selEducation = "No";
-            $scope.allrecords = []; 
-            $scope.errorMessage = "";
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 
-            $scope.fetchcity = function() {
-                let url = "/city-records";
-                $http.get(url).then(function(response) {
-                    $scope.JsonAry = response.data;
-                }, function(err) {
-                    console.error(err);
-                    $scope.errorMessage = "Error fetching cities: " + err.data;
-                });
-            };
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-            $scope.fetchjobtitle = function() {
-                let url = "/jobtitle-records";
-                $http.get(url).then(function(response) {
-                    $scope.JsonAryTitle = response.data;
-                }, function(err) {
-                    console.error(err);
-                    $scope.errorMessage = "Error fetching job titles: " + err.data;
-                });
-            };
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
 
-            $scope.searchjob = function() {
-                let educationFilter = $scope.selEducation === "Yes";
-                let url = `/job-search?city=${$scope.selCity}&jobtitle=${$scope.seljobTitle}&education=${educationFilter}`;
-                $http.get(url).then(function(response) {
-                    $scope.allrecords = response.data;
-                    if ($scope.allrecords.length === 0) {
-                        $scope.errorMessage = "No jobs found for the selected criteria.";
-                    } else {
-                        $scope.errorMessage = "";
-                    }
-                }, function(err) {
-                    console.error(err);
-                    $scope.errorMessage = "Error searching for jobs: " + err.data;
-                });
-            };
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f9fa;
+      color: #212529;
+      min-height: 100vh;
+      padding-top: 60px;
+    }
 
-            $scope.fetchcity();
-            $scope.fetchjobtitle();
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: #212529;
+      color: #fff;
+      padding: 0.75rem 0;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.3rem;
+      box-shadow: 0 3px 6px rgba(33, 37, 41, 0.3);
+      z-index: 1050;
+    }
 
-            $scope.doShowDetails = function(index) {
-                $scope.selObj = $scope.allrecords[index];
-            };
+    /* Sidebar / Filter Panel */
+    .filter-panel {
+      background: #fff;
+      border-radius: 0.5rem;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 0 15px rgb(0 0 0 / 0.08);
+      height: 100%;
+      position: sticky;
+      top: 80px;
+    }
+
+    .filter-panel label {
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .filter-panel .form-check-label {
+      font-weight: 500;
+      color: #495057;
+    }
+
+    /* Search button */
+    .btn-search {
+      background-color: #212529;
+      border: none;
+      width: 100%;
+      font-weight: 600;
+      padding: 0.6rem 0;
+      transition: background-color 0.3s ease;
+      border-radius: 0.375rem;
+    }
+
+    .btn-search:hover {
+      background-color: #343a40;
+    }
+
+    /* Error message */
+    .error-message {
+      color: #dc3545;
+      font-weight: 600;
+      margin-top: 1rem;
+      text-align: center;
+      min-height: 1.5rem;
+    }
+
+    /* Job cards */
+    .job-card {
+      background: #fff;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .job-card:hover {
+      box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+      transform: translateY(-4px);
+    }
+
+    .job-title {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #212529;
+      margin-bottom: 0.5rem;
+    }
+
+    .job-details {
+      color: #6c757d;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    /* More Info button */
+    .btn-more-info {
+      background-color: #212529;
+      color: white;
+      font-weight: 600;
+      padding: 0.4rem 1.2rem;
+      border-radius: 0.375rem;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-more-info:hover {
+      background-color: #343a40;
+      color: white;
+    }
+
+    /* Empty State */
+    .empty-state {
+      font-style: italic;
+      color: #6c757d;
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    /* Modal styling */
+    .modal-content {
+      border-radius: 0.75rem;
+      box-shadow: 0 8px 32px rgb(0 0 0 / 0.15);
+      font-size: 1rem;
+    }
+
+    .modal-header {
+      background-color: #212529;
+      color: white;
+      font-weight: 700;
+      border-bottom: none;
+      border-top-left-radius: 0.75rem;
+      border-top-right-radius: 0.75rem;
+      padding: 1rem 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+    }
+
+    .modal-body table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 0.6rem;
+    }
+
+    .modal-body td:first-child {
+      font-weight: 600;
+      color: #495057;
+      width: 35%;
+      padding-right: 1rem;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+
+    .modal-body td:last-child {
+      color: #212529;
+      word-break: break-word;
+    }
+
+    .modal-footer {
+      border-top: none;
+      padding: 1rem 1.5rem;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 767.98px) {
+      body {
+        padding-top: 120px;
+      }
+
+      .filter-panel {
+        position: static;
+        top: auto;
+        margin-bottom: 2rem;
+        padding: 1.5rem 1rem;
+      }
+    }
+  </style>
+
+  <script>
+    angular.module("myModule", []).controller("myController", function ($scope, $http) {
+      $scope.JsonAry = [];
+      $scope.JsonAryTitle = [];
+      $scope.selCity = "none";
+      $scope.seljobTitle = "none";
+      $scope.selEducation = "No";
+      $scope.allrecords = [];
+      $scope.errorMessage = "";
+      $scope.selObj = {};
+
+      $scope.fetchcity = function () {
+        $http.get("/city-records").then(function (response) {
+          $scope.JsonAry = response.data;
+        }, function (err) {
+          console.error(err);
+          $scope.errorMessage = "Error fetching cities: " + err.data;
         });
-    </script>
+      };
+
+      $scope.fetchjobtitle = function () {
+        $http.get("/jobtitle-records").then(function (response) {
+          $scope.JsonAryTitle = response.data;
+        }, function (err) {
+          console.error(err);
+          $scope.errorMessage = "Error fetching job titles: " + err.data;
+        });
+      };
+
+      $scope.searchjob = function () {
+        let educationFilter = $scope.selEducation === "Yes";
+        let url = `/job-search?city=${$scope.selCity}&jobtitle=${$scope.seljobTitle}&education=${educationFilter}`;
+        $http.get(url).then(function (response) {
+          $scope.allrecords = response.data;
+          if ($scope.allrecords.length === 0) {
+            $scope.errorMessage = "No jobs found for the selected criteria.";
+          } else {
+            $scope.errorMessage = "";
+          }
+        }, function (err) {
+          console.error(err);
+          $scope.errorMessage = "Error searching for jobs: " + err.data;
+        });
+      };
+
+      $scope.doShowDetails = function (index) {
+        $scope.selObj = $scope.allrecords[index];
+      };
+
+      $scope.fetchcity();
+      $scope.fetchjobtitle();
+    });
+  </script>
 </head>
 
-<body ng-app="myModule" ng-controller="myController" ng-init="fetchcity(); fetchjobtitle();">
-    <div class="p-3 mb-3 bg-dark text-white text-center">
-        <h5>www.panhadlers.com</h5>
-    </div>
+<body ng-controller="myController">
+  <header>www.panhadlers.com</header>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 p-4 border rounded shadow-sm bg-white">
-                <label for="citySelect" class="form-label">City</label>
-                <select ng-model="selCity" class="form-select" id="citySelect">
-                    <option value="none">None</option>
-                    <option ng-repeat="boro in JsonAry" value="{{boro.city}}">{{boro.city}}</option>
-                </select>
+  <main class="container py-4">
+    <div class="row g-4">
+      <!-- Filters Panel -->
+      <aside class="col-lg-4">
+        <section class="filter-panel">
+          <label for="citySelect" class="form-label">City</label>
+          <select ng-model="selCity" id="citySelect" class="form-select mb-4" aria-label="Select city">
+            <option value="none">None</option>
+            <option ng-repeat="boro in JsonAry" value="{{ boro.city }}">{{ boro.city }}</option>
+          </select>
 
-                <label for="jobTitleSelect" class="form-label mt-3">Job Title</label>
-                <select ng-model="seljobTitle" class="form-select" id="jobTitleSelect">
-                    <option value="none">None</option>
-                    <option ng-repeat="boro in JsonAryTitle" value="{{boro.jobtitle}}">{{boro.jobtitle}}</option>
-                </select>
+          <label for="jobTitleSelect" class="form-label">Job Title</label>
+          <select ng-model="seljobTitle" id="jobTitleSelect" class="form-select mb-4" aria-label="Select job title">
+            <option value="none">None</option>
+            <option ng-repeat="boro in JsonAryTitle" value="{{ boro.jobtitle }}">{{ boro.jobtitle }}</option>
+          </select>
 
-                <div class="mt-4">
-                    <label class="form-label">Education</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="education" ng-model="selEducation" value="Yes" id="educationYes">
-                        <label class="form-check-label" for="educationYes">Yes</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="education" ng-model="selEducation" value="No" id="educationNo" checked>
-                        <label class="form-check-label" for="educationNo">No</label>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-center mt-4 mb-3">
-                    <button class="btn btn-dark px-5" ng-click="searchjob()">Search</button>
-                </div>
-                <div class="text-danger text-center">{{ errorMessage }}</div>
+          <fieldset class="mb-4">
+            <legend class="form-label fw-semibold">Education</legend>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="educationYes" name="education" ng-model="selEducation" value="Yes" />
+              <label class="form-check-label" for="educationYes">Yes</label>
             </div>
-
-            <div class="col-md-8">
-                <div ng-if="allrecords.length === 0 && !errorMessage" class="text-center">
-                    <p>No jobs available. Please adjust your search criteria.</p>
-                </div>
-                <div ng-repeat="job in allrecords" class="mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ job.jobtitle }}</h5>
-                            <p class="card-text">City: {{ job.city }}<br>Address: {{ job.address }}<br>Owner: {{ job.cid }}</p>
-                            <button class="btn btn-dark" ng-click="doShowDetails($index);" data-bs-toggle="modal" data-bs-target="#modalopen">More Info...</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="educationNo" name="education" ng-model="selEducation" value="No" checked />
+              <label class="form-check-label" for="educationNo">No</label>
             </div>
+          </fieldset>
+
+          <button class="btn btn-search" ng-click="searchjob()" aria-label="Search jobs">Search</button>
+
+          <div class="error-message" role="alert" aria-live="assertive">{{ errorMessage }}</div>
+        </section>
+      </aside>
+
+      <!-- Job Listings -->
+      <section class="col-lg-8">
+        <div ng-if="allrecords.length === 0 && !errorMessage" class="empty-state">
+          <p>No jobs available. Please adjust your search criteria.</p>
         </div>
 
-        <div class="modal" tabindex="-1" id="modalopen" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-secondary text-white">
-                        <h5 class="modal-title">{{ selObj.jobtitle }} in {{ selObj.city }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table>
-                            <tr>
-                                <td>Client ID:</td>
-                                <td>{{selObj.cid}}</td>
-                            </tr>
-                            <tr>
-                                <td>Job ID: </td>
-                                <td>{{selObj.jobid}}</td>
-                            </tr>
-                            <tr>
-                                <td>Job Title: </td>
-                                <td>{{selObj.jobtitle}}</td>
-                            </tr>
-                            <tr>
-                                <td>City: </td>
-                                <td>{{selObj.city}}</td>
-                            </tr>
-                            <tr>
-                                <td>Address: </td>
-                                <td>{{selObj.address}}</td>
-                            </tr>
-                            <tr>
-                                <td>Contact: </td>
-                                <td>{{selObj.contact}}</td>
-                            </tr>
-                            <tr>
-                                <td>Job Type: </td>
-                                <td>{{selObj.jobtype}}</td>
-                            </tr>
-                            <tr>
-                                <td>Education: </td>
-                                <td>{{selObj.education ? 'Yes' : 'No'}}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
+        <div ng-repeat="job in allrecords" class="mb-4">
+          <article class="job-card" tabindex="0" role="button" ng-click="doShowDetails($index)" data-bs-toggle="modal" data-bs-target="#modalopen" aria-label="View more info about {{ job.jobtitle }} in {{ job.city }}">
+            <h2 class="job-title">{{ job.jobtitle }}</h2>
+            <p class="job-details">
+              <strong>City:</strong> {{ job.city }}<br />
+              <strong>Address:</strong> {{ job.address }}<br />
+              <strong>Owner:</strong> {{ job.cid }}
+            </p>
+            <button class="btn btn-more-info" type="button" aria-haspopup="dialog">More Info</button>
+          </article>
         </div>
+      </section>
     </div>
+  </main>
 
+  <!-- Modal -->
+  <div class="modal fade" id="modalopen" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <header class="modal-header">
+          <h3 class="modal-title" id="modalLabel">{{ selObj.jobtitle }} in {{ selObj.city }}</h3>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </header>
+        <div class="modal-body">
+          <table>
+            <tr><td>Client ID:</td><td>{{ selObj.cid }}</td></tr>
+            <tr><td>Job ID:</td><td>{{ selObj.jobid }}</td></tr>
+            <tr><td>Job Title:</td><td>{{ selObj.jobtitle }}</td></tr>
+            <tr><td>City:</td><td>{{ selObj.city }}</td></tr>
+            <tr><td>Address:</td><td>{{ selObj.address }}</td></tr>
+            <tr><td>Contact:</td><td>{{ selObj.contact }}</td></tr>
+            <tr><td>Job Type:</td><td>{{ selObj.jobtype }}</td></tr>
+            <tr><td>Education:</td><td>{{ selObj.education ? 'Yes' : 'No' }}</td></tr>
+          </table>
+        </div>
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        </footer>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
