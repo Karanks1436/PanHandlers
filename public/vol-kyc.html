@@ -2,152 +2,380 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volunteer</title>
-    <meta name="google-adsense-account" content="ca-pub-7210368865406744">
-    <link rel="icon" href="https://media.istockphoto.com/id/1399229336/vector/homeless-man-on-street-businessmen.jpg?s=612x612&w=0&k=20&c=uL7nSHRWT-K160Nfh8WgRGjAIbiUwPlGCzec0zVYHPw=" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script>
-        function init(){
-            let activeUser= localStorage.getItem("activeUser")
-            document.getElementById("txtEmail").value=activeUser;
-        }
-    </script>
-    <script>
-        function showPreview(fileUpload, previewImage) {
-            const file = fileUpload.files[0];
-            if (file && file.type.startsWith('image/')) {
-                previewImage.src = window.URL.createObjectURL(file);
-            } else {
-                alert('Please upload a valid image file.');
-            }
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Volunteer KYC</title>
+  <link rel="icon" href="https://media.istockphoto.com/id/1399229336/vector/homeless-man-on-street-businessmen.jpg?s=612x612&w=0&k=20&c=uL7nSHRWT-K160Nfh8WgRGjAIbiUwPlGCzec0zVYHPw=" type="image/x-icon" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-        $(document).ready(function () {
-            $("#fetch").click(function () {
-                $.ajax({
-                    type: "GET",
-                    url: "/fetchone",
-                    data: { txtEmail: $("#txtEmail").val() },
-                    success: function (response) {
-                        if (response.length === 0) {
-                            alert("Invalid Email ID / Password");
-                        } else {
-                            const user = response[0];
-                            $("#txtName").val(user.name);
-                            $("#txtDob").val(user.dob.substr(0, 10));
-                            $("#txtContact").val(user.contact.substr(0, 10));
-                            $("#txtAddress").val(user.address);
-                            $("#txtCity").val(user.city);
-                            $("#gen").val(user.gender);
-                            $("#qual").val(user.quali);
-                            $("#occu").val(user.occu);
-                            $("#prev").prop("src", user.picpath);
-                        }
-                    },
-                    error: function (err) {
-                        alert(err.message);
-                    }
-                });
-            });
+  <style>
+    /* Dark mode base */
+    body {
+      background: #121212;
+      color: #eee;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #1f1f1f;
+      padding: 1.25rem 0;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: 3px;
+      color: #ff5722;
+      user-select: none;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px #ff572230;
+    }
+
+    main.container {
+      max-width: 900px;
+      margin: 3rem auto 5rem;
+      background: #222;
+      border-radius: 1rem;
+      padding: 3rem 3rem 4rem;
+      box-shadow: 0 0 30px #ff572230;
+      transition: box-shadow 0.3s ease;
+    }
+
+    main.container:hover {
+      box-shadow: 0 0 45px #ff5722bb;
+    }
+
+    h1 {
+      font-weight: 900;
+      font-size: 2.8rem;
+      color: #ff5722;
+      margin-bottom: 2rem;
+      letter-spacing: 0.15em;
+      user-select: text;
+    }
+
+    .border {
+      border: none !important;
+      background: transparent !important;
+    }
+
+    /* Left side images */
+    .col-lg-3 {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      justify-content: flex-start;
+    }
+
+    img#prev,
+    img#prev2 {
+      width: 100%;
+      max-height: 240px;
+      border-radius: 15px;
+      object-fit: cover;
+      box-shadow: 0 6px 15px #ff5722aa;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    img#prev:hover,
+    img#prev2:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px #ff5722dd;
+    }
+
+    /* File inputs styling */
+    input[type="file"] {
+      margin-top: 0.8rem;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      border: 1.8px solid #ff5722aa;
+      background: #1a1a1a;
+      color: #ff5722;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+    }
+
+    input[type="file"]:hover {
+      background-color: #ff5722;
+      color: #222;
+    }
+
+    /* Form labels */
+    label.form-label {
+      font-weight: 700;
+      color: #ff8a50;
+      user-select: none;
+      font-size: 1.1rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* Inputs and selects */
+    input.form-control,
+    select.form-select,
+    textarea.form-control {
+      background: #1a1a1a;
+      border: 2px solid #ff5722aa;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1.2rem;
+      padding: 0.65rem 1.1rem;
+      box-shadow: inset 0 0 6px #ff572299;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input.form-control::placeholder,
+    textarea.form-control::placeholder {
+      color: #ffb88caa;
+    }
+
+    input.form-control:focus,
+    select.form-select:focus,
+    textarea.form-control:focus {
+      outline: none;
+      border-color: #ff5722;
+      box-shadow: 0 0 10px 2px #ff5722cc;
+      background: #2a2a2a;
+    }
+
+    textarea.form-control {
+      min-height: 130px;
+      resize: vertical;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Button styling */
+    .btn-dark,
+    .btn-secondary {
+      font-weight: 900;
+      padding: 0.75rem 3rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      box-shadow: 0 6px 18px #ff5722bb;
+      border: none;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+
+    .btn-dark {
+      background: #ff5722;
+      color: #fff;
+      text-shadow: 1px 1px 2px #b23b0d;
+    }
+
+    .btn-dark:hover,
+    .btn-dark:focus {
+      background: #e64a19;
+      box-shadow: 0 10px 30px #ff5722ee;
+      outline: none;
+    }
+
+    .btn-secondary {
+      background: #4e342e;
+      color: #ffccbc;
+      box-shadow: 0 6px 18px #4e342eaa;
+    }
+
+    .btn-secondary:hover,
+    .btn-secondary:focus {
+      background: #3e2723;
+      box-shadow: 0 10px 30px #ff8a65cc;
+      outline: none;
+    }
+
+    /* Layout */
+    .row > div {
+      padding: 1rem 2rem;
+    }
+
+    .mb-4.d-flex label {
+      min-width: 110px;
+      user-select: none;
+      align-self: center;
+      padding-right: 0.75rem;
+    }
+
+    .mb-4.d-flex input,
+    .mb-4.d-flex select,
+    .mb-4.d-flex textarea {
+      flex-grow: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 991.98px) {
+      .mb-4.d-flex {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .mb-4.d-flex label {
+        min-width: 100%;
+        padding: 0;
+      }
+
+      .mb-4.d-flex input,
+      .mb-4.d-flex select,
+      .mb-4.d-flex textarea {
+        flex-basis: 100%;
+      }
+    }
+
+    @media (max-width: 576px) {
+      main.container {
+        padding: 2rem 1.5rem 3rem;
+      }
+
+      img#prev,
+      img#prev2 {
+        max-height: 180px;
+      }
+    }
+  </style>
+
+  <script>
+    function init() {
+      let activeUser = localStorage.getItem("activeUser");
+      document.getElementById("txtEmail").value = activeUser || '';
+    }
+
+    function showPreview(fileUpload, previewImage) {
+      const file = fileUpload.files[0];
+      if (file && file.type.startsWith('image/')) {
+        previewImage.src = window.URL.createObjectURL(file);
+      } else {
+        alert('Please upload a valid image file.');
+      }
+    }
+
+    $(document).ready(function () {
+      $("#fetch").click(function () {
+        $.ajax({
+          type: "GET",
+          url: "/fetchone",
+          data: { txtEmail: $("#txtEmail").val() },
+          success: function (response) {
+            if (response.length === 0) {
+              alert("Invalid Email ID / Password");
+            } else {
+              const user = response[0];
+              $("#txtName").val(user.name);
+              $("#txtDob").val(user.dob.substr(0, 10));
+              $("#txtContact").val(user.contact.substr(0, 10));
+              $("#txtAddress").val(user.address);
+              $("#txtCity").val(user.city);
+              $("#gen").val(user.gender);
+              $("#qual").val(user.quali);
+              $("#occu").val(user.occu);
+              $("#prev").prop("src", user.picpath);
+            }
+          },
+          error: function (err) {
+            alert(err.message);
+          }
         });
-    </script>
+      });
+    });
+  </script>
 </head>
 
 <body onload="init();">
-    <header class="bg-dark text-white p-2 text-center">
-        <h5>www.panhadlers.com</h5>
-    </header>
+  <header>
+    <h5>www.panhadlers.com</h5>
+  </header>
 
-    <main class="container bg-white p-5 my-4 shadow-sm rounded">
-        <form method="post" action="/vol-kyc" enctype="multipart/form-data">
-            <div class="row">
-                <!-- Left column for image uploads -->
-                <div class="col-lg-3 border p-3">
-                    <div class="mb-4">
-                        <label for="fileUpload" class="form-label">User Image</label><br>
-                        <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg" alt="User Image Preview" id="prev" class="img-fluid mt-4 mb-5" width="200">
-                        <input type="file" class="form-control" name="profpic" id="fileUpload" onchange="showPreview(fileUpload, prev)" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="fileUpload2" class="form-label">ID Proof</label>
-                        <img src="https://www.drupal.org/files/project-images/idproof.png" alt="ID Proof Preview" id="prev2" class="img-fluid mt-4 mb-5" width="200">
-                        <input type="file" class="form-control" name="idpath" id="fileUpload2" onchange="showPreview(fileUpload2, prev2)" required>
-                    </div>
-                </div>
+  <main class="container shadow-sm rounded">
+    <form method="post" action="/vol-kyc" enctype="multipart/form-data" novalidate>
+      <div class="row g-4">
+        <!-- Left column for images -->
+        <div class="col-lg-3">
+          <div>
+            <label for="fileUpload" class="form-label">User Image</label>
+            <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg" alt="User Image Preview" id="prev" class="img-fluid mt-3" />
+            <input type="file" class="form-control" name="profpic" id="fileUpload" onchange="showPreview(fileUpload, prev)" required />
+          </div>
 
-                <!-- Right column for form fields -->
-                <div class="col-lg-9 border p-4">
-                    <h1 class="text-warning">Volunteer KYC</h1>
+          <div>
+            <label for="fileUpload2" class="form-label">ID Proof</label>
+            <img src="https://www.drupal.org/files/project-images/idproof.png" alt="ID Proof Preview" id="prev2" class="img-fluid mt-3" />
+            <input type="file" class="form-control" name="idpath" id="fileUpload2" onchange="showPreview(fileUpload2, prev2)" required />
+          </div>
+        </div>
 
-                    <div class="mb-4">
-                        <label for="txtEmail" class="form-label">Email ID</label>
-                        <input required type="email" class="form-control" name="txtEmail" id="txtEmail" required readonly>
-                        <button type="button" id="fetch" class="btn btn-dark mt-2">Search</button>
-                    </div>
+        <!-- Right column for form fields -->
+        <div class="col-lg-9">
+          <h1>Volunteer KYC</h1>
 
-                    <div class="mb-4 d-flex">
-                        <label for="txtName" class="form-label">Name</label>
-                        <input required type="text" class="form-control mx-3 w-25" name="txtName" id="txtName">
+          <div class="mb-4 d-flex flex-wrap align-items-center gap-3">
+            <label for="txtEmail" class="form-label mb-0">Email ID</label>
+            <input type="email" class="form-control flex-grow-1" name="txtEmail" id="txtEmail" readonly required />
+            <button type="button" id="fetch" class="btn btn-dark px-4 py-2">Search</button>
+          </div>
 
-                        <label for="txtContact" class="form-label">Contact No.</label>
-                        <input required type="number" class="form-control mx-3 w-25" name="txtContact" id="txtContact">
-                    </div>
+          <div class="mb-4 d-flex flex-wrap align-items-center gap-3">
+            <label for="txtName" class="form-label mb-0">Name</label>
+            <input type="text" class="form-control flex-grow-1" name="txtName" id="txtName" required />
 
-                    <div class="mb-4">
-                        <label for="txtAddress" class="form-label">Address</label>
-                        <input required type="text" class="form-control" name="txtAddress" id="txtAddress">
-                    </div>
+            <label for="txtContact" class="form-label mb-0">Contact No.</label>
+            <input type="number" class="form-control flex-grow-1" name="txtContact" id="txtContact" required />
+          </div>
 
-                    <div class="mb-4 d-flex">
-                        <label for="txtCity" class="form-label">City</label>
-                        <input required type="text" class="form-control mx-3 w-25" name="txtCity" id="txtCity">
+          <div class="mb-4">
+            <label for="txtAddress" class="form-label">Address</label>
+            <input type="text" class="form-control" name="txtAddress" id="txtAddress" required />
+          </div>
 
-                        <label for="gen" class="form-label">Gender</label>
-                        <select class="form-select mx-3 w-25" name="gen" id="gen">
-                            <option value="none">Select</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                    </div>
+          <div class="mb-4 d-flex flex-wrap align-items-center gap-3">
+            <label for="txtCity" class="form-label mb-0">City</label>
+            <input type="text" class="form-control flex-grow-1" name="txtCity" id="txtCity" required />
 
-                    <div class="mb-4 d-flex">
-                        <label for="txtDob" class="form-label">D.O.B</label>
-                        <input required type="date" class="form-control mx-3 w-25" name="txtDob" id="txtDob">
+            <label for="gen" class="form-label mb-0">Gender</label>
+            <select class="form-select flex-grow-1" name="gen" id="gen" required>
+              <option value="" disabled selected>Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
 
-                        <label for="qual" class="form-label">Qualification</label>
-                        <select class="form-select mx-3 w-25" name="qual" id="qual" required>
-                            <option value="none">Select</option>
-                            <option value="10th">10th</option>
-                            <option value="12th">12th</option>
-                        </select>
-                    </div>
+          <div class="mb-4 d-flex flex-wrap align-items-center gap-3">
+            <label for="txtDob" class="form-label mb-0">D.O.B</label>
+            <input type="date" class="form-control flex-grow-1" name="txtDob" id="txtDob" required />
 
-                    <div class="mb-4 d-flex">
-                        <label for="occu" class="form-label">Occupation</label>
-                        <select class="form-select mx-3 w-25" name="occu" id="occu" required>
-                            <option value="none">Select</option>
-                            <option value="Job">Job</option>
-                            <option value="Business">Business</option>
-                        </select>
+            <label for="qual" class="form-label mb-0">Qualification</label>
+            <select class="form-select flex-grow-1" name="qual" id="qual" required>
+              <option value="" disabled selected>Select</option>
+              <option value="10th">10th</option>
+              <option value="12th">12th</option>
+            </select>
+          </div>
 
-                        <label for="info" class="form-label">Other Info</label>
-                        <textarea class="form-control mx-3 w-50" name="info" id="info"></textarea>
-                    </div>
+          <div class="mb-4 d-flex flex-wrap align-items-center gap-3">
+            <label for="occu" class="form-label mb-0">Occupation</label>
+            <select class="form-select flex-grow-1" name="occu" id="occu" required>
+              <option value="" disabled selected>Select</option>
+              <option value="Job">Job</option>
+              <option value="Business">Business</option>
+            </select>
 
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-dark mx-2 text-light fw-bold">Register</button>
-                        <button type="submit" class="btn btn-secondary mx-2 text-light fw-bold" formaction="/updatedata">Update</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </main>
+            <label for="info" class="form-label mb-0">Other Info</label>
+            <textarea class="form-control flex-grow-1" name="info" id="info" placeholder="Additional details..."></textarea>
+          </div>
 
+          <div class="d-flex justify-content-center gap-4 mt-5 flex-wrap">
+            <button type="submit" class="btn btn-dark text-light fw-bold px-5 py-3">Register</button>
+            <button type="submit" class="btn btn-secondary text-light fw-bold px-5 py-3" formaction="/updatedata">Update</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
 </body>
 
 </html>
