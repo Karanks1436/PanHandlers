@@ -1,128 +1,411 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myModule">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Manager</title>
-    <meta name="google-adsense-account" content="ca-pub-7210368865406744">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
-    <script>
-        let module = angular.module("myModule", []);
-        module.controller("myController", function ($scope, $http) {
-            $scope.selEmail = "";
-            $scope.allrecords = [];
-            $scope.errorMessage = "";
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Job Manager</title>
+  <meta name="google-adsense-account" content="ca-pub-7210368865406744" />
 
-            // Automatically set email from localStorage
-            $scope.initEmail = function () {
-                let activeUser = localStorage.getItem("activeUser");
-                if (activeUser) {
-                    $scope.selEmail = activeUser;
-                }
-            };
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- Popper and Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  <!-- AngularJS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
 
-            // Fetch jobs based on email
-            $scope.searchjob = function () {
-                if (!$scope.selEmail) {
-                    $scope.errorMessage = "No email found in localStorage.";
-                    return;
-                }
+  <style>
+    /* Dark theme base */
+    body {
+      background: #121212;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+    }
 
-                let url = `/job-search-email?cid=${$scope.selEmail}`;
-                $http.get(url).then(function (response) {
-                    $scope.allrecords = response.data;
-                    $scope.errorMessage = $scope.allrecords.length === 0 ? "No jobs found for this email." : "";
-                }, function (err) {
-                    console.error(err);
-                    $scope.errorMessage = "Error searching for jobs: " + err.data;
-                });
-            };
+    /* Header */
+    .header {
+      background: linear-gradient(90deg, #8a2be2, #4b0082);
+      box-shadow: 0 5px 20px rgba(75, 0, 130, 0.8);
+      padding: 1.25rem 0;
+      margin-bottom: 30px;
+      user-select: none;
+    }
 
-            // Show job details
-            $scope.doShowDetails = function(index) {
-                $scope.selObj = $scope.allrecords[index];
-            };
+    .header h5 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: 0.1em;
+      color: #ede7f6;
+      text-align: center;
+      text-shadow: 0 0 8px #b388ff;
+    }
 
-            // Delete job
-            $scope.deleteJob = function (jobid) {
-                if (confirm("Are you sure you want to delete this job?")) {
-                    let url = `/do-delete?jobid=${jobid}`;
-                    $http.get(url).then(function (response) {
-                        alert(response.data);
-                        $scope.searchjob(); // Refresh job list
-                    }, function (err) {
-                        console.error(err);
-                        $scope.errorMessage = "Error deleting job: " + err.data;
-                    });
-                }
-            };
+    /* Container grid */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto 60px;
+      padding: 0 15px;
+    }
 
-            $scope.initEmail(); // Set email on page load
+    /* Left panel - input */
+    .input-panel {
+      background: #1e1e2f;
+      border-radius: 15px;
+      box-shadow: 0 12px 30px rgba(138, 43, 226, 0.3);
+      padding: 2.5rem 2rem;
+      transition: box-shadow 0.3s ease;
+      border: 1px solid #8a2be2;
+    }
+
+    .input-panel:hover {
+      box-shadow: 0 20px 40px rgba(138, 43, 226, 0.6);
+    }
+
+    label.form-label {
+      color: #c4b5fd;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="email"] {
+      background: #2a2a3e !important;
+      color: #d1c4e9 !important;
+      border: 1.5px solid #6e57e0 !important;
+      font-weight: 600;
+      border-radius: 10px !important;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="email"]:focus {
+      border-color: #b388ff !important;
+      box-shadow: 0 0 10px #b388ff !important;
+      outline: none !important;
+      background: #3b3b58 !important;
+      color: #fff !important;
+    }
+
+    .btn-dark {
+      background: #7b5cf6;
+      border: none;
+      font-weight: 700;
+      padding: 0.6rem 3rem;
+      font-size: 1rem;
+      border-radius: 35px;
+      letter-spacing: 0.08em;
+      color: #fff;
+      box-shadow: 0 5px 15px rgba(123, 92, 246, 0.6);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-dark:hover,
+    .btn-dark:focus {
+      background-color: #b388ff;
+      box-shadow: 0 8px 22px rgba(179, 136, 255, 0.8);
+      color: #21005d;
+      outline: none;
+    }
+
+    .text-danger {
+      margin-top: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-align: center;
+    }
+
+    /* Right panel - jobs list */
+    .job-card {
+      background: #1f1f2f;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 22px rgba(75, 0, 130, 0.35);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .job-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 38px rgba(75, 0, 130, 0.6);
+    }
+
+    .card-body {
+      padding: 1.5rem 1.8rem;
+    }
+
+    .card-title {
+      color: #b388ff;
+      font-weight: 700;
+      font-size: 1.35rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 8px #b388ff;
+    }
+
+    .card-text {
+      font-size: 0.95rem;
+      color: #ccc;
+      line-height: 1.45;
+      margin-bottom: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* Buttons inside cards */
+    .btn-dark {
+      padding: 0.4rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 25px;
+      box-shadow: 0 4px 12px rgba(123, 92, 246, 0.5);
+    }
+
+    .btn-danger {
+      background-color: #cf6679;
+      border: none;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(207, 102, 121, 0.6);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 25px;
+      font-size: 0.9rem;
+    }
+
+    .btn-danger:hover,
+    .btn-danger:focus {
+      background-color: #ff8a95;
+      box-shadow: 0 6px 18px rgba(255, 138, 149, 0.8);
+      outline: none;
+    }
+
+    /* Modal overrides */
+    .modal-content {
+      background: #2b2b45;
+      color: #e1def8;
+      border-radius: 20px;
+      border: 1px solid #7b5cf6;
+      box-shadow: 0 10px 30px rgba(123, 92, 246, 0.8);
+      font-size: 0.95rem;
+    }
+
+    .modal-header {
+      background: #7b5cf6;
+      border-bottom: 2px solid #b388ff;
+      color: white;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 7px #b388ff;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+    }
+
+    .modal-footer {
+      border-top: 2px solid #b388ff;
+      background: #1f1f2f;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .btn-secondary {
+      background-color: #4b0082;
+      border: none;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(75, 0, 130, 0.5);
+      transition: background-color 0.3s ease;
+      border-radius: 25px;
+    }
+
+    .btn-secondary:hover,
+    .btn-secondary:focus {
+      background-color: #7b5cf6;
+      box-shadow: 0 6px 18px rgba(123, 92, 246, 0.7);
+      outline: none;
+      color: #fff;
+    }
+
+    /* Modal table styling */
+    .modal-body table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 0.75rem;
+    }
+
+    .modal-body td {
+      padding: 0.25rem 1rem;
+      vertical-align: middle;
+      font-weight: 600;
+    }
+
+    .modal-body td:first-child {
+      color: #b388ff;
+      width: 40%;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .modal-body td:last-child {
+      color: #ddd;
+      font-weight: 500;
+      text-align: left;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 10px;
+      }
+
+      .input-panel {
+        margin-bottom: 30px;
+      }
+    }
+  </style>
+
+  <script>
+    let module = angular.module("myModule", []);
+    module.controller("myController", function ($scope, $http) {
+      $scope.selEmail = "";
+      $scope.allrecords = [];
+      $scope.errorMessage = "";
+
+      $scope.initEmail = function () {
+        let activeUser = localStorage.getItem("activeUser");
+        if (activeUser) {
+          $scope.selEmail = activeUser;
+        }
+      };
+
+      $scope.searchjob = function () {
+        if (!$scope.selEmail) {
+          $scope.errorMessage = "No email found in localStorage.";
+          return;
+        }
+
+        let url = `/job-search-email?cid=${$scope.selEmail}`;
+        $http.get(url).then(function (response) {
+          $scope.allrecords = response.data;
+          $scope.errorMessage = $scope.allrecords.length === 0 ? "No jobs found for this email." : "";
+        }, function (err) {
+          console.error(err);
+          $scope.errorMessage = "Error searching for jobs: " + err.data;
         });
-    </script>
+      };
+
+      $scope.doShowDetails = function (index) {
+        $scope.selObj = $scope.allrecords[index];
+      };
+
+      $scope.deleteJob = function (jobid) {
+        if (confirm("Are you sure you want to delete this job?")) {
+          let url = `/do-delete?jobid=${jobid}`;
+          $http.get(url).then(function (response) {
+            alert(response.data);
+            $scope.searchjob();
+          }, function (err) {
+            console.error(err);
+            $scope.errorMessage = "Error deleting job: " + err.data;
+          });
+        }
+      };
+
+      $scope.initEmail();
+    });
+  </script>
 </head>
 
-<body ng-app="myModule" ng-controller="myController">
-    <div class="p-3 mb-3 bg-dark text-white text-center">
-        <h5>www.panhadlers.com</h5>
-    </div>
+<body ng-controller="myController">
+  <div class="header">
+    <h5>www.panhadlers.com</h5>
+  </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 p-4 border rounded shadow-sm bg-white">
-                <label for="emailinput" class="form-label">Your Email:</label>
-                <input type="email" id="emailinput" class="form-control" ng-model="selEmail" readonly>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 input-panel">
+        <label for="emailinput" class="form-label">Your Email:</label>
+        <input type="email" id="emailinput" class="form-control" ng-model="selEmail" readonly />
 
-                <div class="d-flex justify-content-center mt-4 mb-3">
-                    <button class="btn btn-dark px-5" ng-click="searchjob()">Search</button>
-                </div>
-
-                <div class="text-danger text-center">{{ errorMessage }}</div>
-            </div>
-
-            <div class="col-md-8">
-                <div ng-repeat="job in allrecords" class="mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ job.jobtitle }}</h5>
-                            <p class="card-text">City: {{ job.city }}<br>Address: {{ job.address }}<br>Owner: {{ job.cid }}</p>
-                            <button class="btn btn-dark" ng-click="doShowDetails($index);" data-bs-toggle="modal" data-bs-target="#modalopen">More Info...</button>
-                            <button type="button" class="btn btn-danger float-end" ng-click="deleteJob(job.jobid)">Delete</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="d-flex justify-content-center mt-4 mb-3">
+          <button class="btn btn-dark px-5" ng-click="searchjob()">Search</button>
         </div>
 
-        <div class="modal" tabindex="-1" id="modalopen" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-secondary text-white">
-                        <h5 class="modal-title">{{ selObj.jobtitle }} in {{ selObj.city }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table>
-                            <tr><td>Client ID:</td><td>{{ selObj.cid }}</td></tr>
-                            <tr><td>Job ID:</td><td>{{ selObj.jobid }}</td></tr>
-                            <tr><td>Job Title:</td><td>{{ selObj.jobtitle }}</td></tr>
-                            <tr><td>City:</td><td>{{ selObj.city }}</td></tr>
-                            <tr><td>Address:</td><td>{{ selObj.address }}</td></tr>
-                            <tr><td>Contact:</td><td>{{ selObj.contact }}</td></tr>
-                            <tr><td>Job Type:</td><td>{{ selObj.jobtype }}</td></tr>
-                            <tr><td>Education:</td><td>{{ selObj.education ? 'Yes' : 'No' }}</td></tr>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
+        <div class="text-danger text-center">{{ errorMessage }}</div>
+      </div>
+
+      <div class="col-md-8">
+        <div ng-repeat="job in allrecords" class="job-card">
+          <div class="card shadow-sm bg-transparent border-0">
+            <div class="card-body">
+              <h5 class="card-title">{{ job.jobtitle }}</h5>
+              <p class="card-text">
+                <strong>City:</strong> {{ job.city }}<br />
+                <strong>Address:</strong> {{ job.address }}<br />
+                <strong>Owner:</strong> {{ job.cid }}
+              </p>
+              <button class="btn btn-dark" ng-click="doShowDetails($index);" data-bs-toggle="modal" data-bs-target="#modalopen">More Info...</button>
+              <button type="button" class="btn btn-danger float-end" ng-click="deleteJob(job.jobid)">Delete</button>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" tabindex="-1" id="modalopen" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ selObj.jobtitle }} in {{ selObj.city }}</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table>
+              <tr>
+                <td>Client ID:</td>
+                <td>{{ selObj.cid }}</td>
+              </tr>
+              <tr>
+                <td>Job ID:</td>
+                <td>{{ selObj.jobid }}</td>
+              </tr>
+              <tr>
+                <td>Job Title:</td>
+                <td>{{ selObj.jobtitle }}</td>
+              </tr>
+              <tr>
+                <td>City:</td>
+                <td>{{ selObj.city }}</td>
+              </tr>
+              <tr>
+                <td>Address:</td>
+                <td>{{ selObj.address }}</td>
+              </tr>
+              <tr>
+                <td>Contact:</td>
+                <td>{{ selObj.contact }}</td>
+              </tr>
+              <tr>
+                <td>Job Type:</td>
+                <td>{{ selObj.jobtype }}</td>
+              </tr>
+              <tr>
+                <td>Education:</td>
+                <td>{{ selObj.education ? 'Yes' : 'No' }}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
+
 </html>
