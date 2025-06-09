@@ -2,71 +2,168 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <meta name="google-adsense-account" content="ca-pub-7210368865406744">
-    <link rel="icon" type="image/x-icon" href="https://www.example.com/favicon.ico">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script>
-         function doLogout(){
-            localStorage.removeItem("activeUser");
-            alert("logged Out");
-            window.location.href="/";
-        }
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <meta name="google-adsense-account" content="ca-pub-7210368865406744" />
+  <link rel="icon" type="image/x-icon" href="https://www.example.com/favicon.ico" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+  <script>
+    function doLogout() {
+      localStorage.removeItem("activeUser");
+      alert("Logged Out");
+      window.location.href = "/";
+    }
+  </script>
+
+  <style>
+    /* Reset and base font */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #f4f7fc;
+      padding-top: 20px;
+    }
+
+    /* Header */
+    .p-3.bg-dark {
+      background-color: #343a40 !important;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .p-3.bg-dark h5 {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.3rem;
+      user-select: none;
+      letter-spacing: 0.05em;
+    }
+
+    /* Card styling */
+    .card {
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      background-color: #fff;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Card images */
+    .card-img-top {
+      height: 320px;
+      object-fit: cover;
+      border-radius: 15px 15px 0 0;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-img-top {
+      transform: scale(1.05);
+    }
+
+    /* Card body */
+    .card-body {
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Buttons */
+    .btn-dark {
+      background-color: #343a40;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-dark:hover {
+      background-color: #495057;
+      text-decoration: none;
+      color: white;
+    }
+
+    /* Responsive layout */
+    @media (max-width: 767px) {
+      .card {
+        margin-bottom: 25px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="p-3 mb-3 bg-dark" >
-        <h5 class="text-center text-white">www.panhadlers.com</h5>
-    </div>
+  <div class="p-3 bg-dark">
+    <h5 class="text-center">www.panhadlers.com</h5>
+  </div>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card shadow-lg">
-                    <img src="https://i.pinimg.com/564x/bc/80/23/bc8023c1733d6ce29895293520f40f1d.jpg" class="card-img-top" alt="User Control" style="height: 320px; object-fit: cover;">
-                    <div class="card-body d-flex justify-content-center">
-                        <a href="user-controller.html" class="btn btn-dark px-5">User Control</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card shadow-lg">
-                    <img src="https://img.freepik.com/free-vector/volunteers-work-vertical-banners-set_1284-14296.jpg?semt=ais_hybrid" class="card-img-top" alt="Volunteer Manager" style="height: 320px; object-fit: cover;">
-                    <div class="card-body d-flex justify-content-center">
-                        <a href="volunteer-manager.html" class="btn btn-dark px-5">Volunteer Manager</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card shadow-lg">
-                    <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg" class="card-img-top" alt="Client Manager" style="height: 320px; object-fit: cover;">
-                    <div class="card-body d-flex justify-content-center">
-                        <a href="client-manager.html" class="btn btn-dark px-5">Client Manager</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card shadow">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3240/3240728.png" class="card-img-top" alt="Logout">
-                    <div class="card-body d-flex justify-content-center">
-                        <!-- <button type="button" formaction="/logout" class="btn btn-dark px-5">Logout</button> -->
-                        
-                            <a href="#" onclick="doLogout();" class="btn btn-dark px-5">Logout</a>
-                        
-                    </div>
-                </div>
-            </div>
+  <div class="container">
+    <div class="row justify-content-center g-4">
+      <!-- User Control Card -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card shadow-lg">
+          <img src="https://i.pinimg.com/564x/bc/80/23/bc8023c1733d6ce29895293520f40f1d.jpg" class="card-img-top"
+            alt="User Control" />
+          <div class="card-body d-flex justify-content-center">
+            <a href="user-controller.html" class="btn btn-dark px-5">User Control</a>
+          </div>
         </div>
+      </div>
+
+      <!-- Volunteer Manager Card -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card shadow-lg">
+          <img src="https://img.freepik.com/free-vector/volunteers-work-vertical-banners-set_1284-14296.jpg?semt=ais_hybrid"
+            class="card-img-top" alt="Volunteer Manager" />
+          <div class="card-body d-flex justify-content-center">
+            <a href="volunteer-manager.html" class="btn btn-dark px-5">Volunteer Manager</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Client Manager Card -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card shadow-lg">
+          <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg" class="card-img-top"
+            alt="Client Manager" />
+          <div class="card-body d-flex justify-content-center">
+            <a href="client-manager.html" class="btn btn-dark px-5">Client Manager</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logout Card -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card shadow-lg">
+          <img src="https://cdn-icons-png.flaticon.com/512/3240/3240728.png" class="card-img-top" alt="Logout" />
+          <div class="card-body d-flex justify-content-center">
+            <a href="#" onclick="doLogout();" class="btn btn-dark px-5">Logout</a>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </body>
 
 </html>
